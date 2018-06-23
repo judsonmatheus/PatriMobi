@@ -3,10 +3,12 @@ package com.aula5.judson.patrimobi.activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.view.View;
@@ -62,10 +64,12 @@ public class MainActivity extends ListActivity implements OnItemLongClickListene
     }
 
     public void buscar(View view) {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         try {
             EditText mEdit = findViewById(R.id.main_editText);
             int id = Integer.parseInt(mEdit.getText().toString());
-
+            mEdit.setText("");
             itemDAO.buscar(id);
             updateList();
         }catch (Exception e){

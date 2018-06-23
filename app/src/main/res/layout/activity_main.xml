@@ -69,6 +69,7 @@
                 android:text="OBJETO"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:textColor="@android:color/black"
                 android:gravity="center"/>
             <TextView
                 android:layout_width="0dp"
@@ -77,6 +78,7 @@
                 android:text="LOCALIZAÇÃO"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:textColor="@android:color/black"
                 android:gravity="center"
 
                 />
