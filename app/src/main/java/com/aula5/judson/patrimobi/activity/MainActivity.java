@@ -1,6 +1,5 @@
-package com.aula5.judson.patrimobi;
+package com.aula5.judson.patrimobi.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.ActivityNotFoundException;
@@ -10,15 +9,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aula5.judson.patrimobi.R;
 import com.aula5.judson.patrimobi.adapter.ItemAdapter;
 import com.aula5.judson.patrimobi.data.Item;
 import com.aula5.judson.patrimobi.data.ItemDAO;
@@ -58,10 +54,25 @@ public class MainActivity extends ListActivity implements OnItemLongClickListene
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        Toast.makeText(this, "Clicou no item " + position, Toast.LENGTH_SHORT).show();
+        Item item = (Item) adapter.getItem((int) position);
+//        Toast.makeText(this, item.getNome().toString(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, ItemActivity.class);
+        intent.putExtra("Item", item);
+        startActivity(intent);
     }
 
+    public void buscar(View view) {
+        try {
+            EditText mEdit = findViewById(R.id.main_editText);
+            int id = Integer.parseInt(mEdit.getText().toString());
 
+            itemDAO.buscar(id);
+            updateList();
+        }catch (Exception e){
+            Toast.makeText(this, "CÓDIGO NÃO CADASTRADO!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
 
 
@@ -114,6 +125,7 @@ public class MainActivity extends ListActivity implements OnItemLongClickListene
             }
         }
     }
+
 
 
 }

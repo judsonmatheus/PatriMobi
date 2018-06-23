@@ -1,9 +1,11 @@
-package com.aula5.judson.patrimobi;
+package com.aula5.judson.patrimobi.activity;
 
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.aula5.judson.patrimobi.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
