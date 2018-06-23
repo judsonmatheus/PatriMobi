@@ -1,10 +1,12 @@
-package com.aula5.judson.patrimobi.Dados;
+package com.aula5.judson.patrimobi.data;
+
+import java.io.Serializable;
 
 /**
  * Created by Judson on 21/06/2018.
  */
 
-public class Item {
+public class Item implements Serializable{
     private int id;
     private String nome;
     private String localizacao;
@@ -14,9 +16,9 @@ public class Item {
     }
 
     public Item(int id, String nome, String localizacao){
-        id = this.id;
-        nome = this.nome;
-        localizacao = this.localizacao;
+        this.id = id;
+        this.nome = nome;
+        this.localizacao = localizacao;
     }
 
     public int getId() {

@@ -2,28 +2,73 @@ package com.aula5.judson.patrimobi;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends Activity {
+import com.aula5.judson.patrimobi.adapter.ItemAdapter;
+import com.aula5.judson.patrimobi.data.Item;
+import com.aula5.judson.patrimobi.data.ItemDAO;
+
+import java.util.List;
+
+public class MainActivity extends ListActivity implements OnItemLongClickListener{
     static final String ACTION_SCAN = "com.google.zxing.client.android.SCAN";
+    private ItemDAO itemDAO;
+    private ItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        adapter = new ItemAdapter(this);
+        setListAdapter(adapter);
+
+        getListView().setOnItemLongClickListener(this);
+
+       itemDAO = new ItemDAO();
+
+        updateList();
+    }
+
+    private void updateList() {
+        List<Item> items = itemDAO.list();
+//        List<Item> items = adapter.getItems();
+        adapter.setItems(items);
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        return false;
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        Toast.makeText(this, "Clicou no item " + position, Toast.LENGTH_SHORT).show();
     }
 
 
+
+
+
+
+    //--------------------------------------------------------------------------------------------------------
+
+//Leitura de código de barra começa aqui
     public void readeCodebar(View view) {
         try {
             Intent intent = new Intent(ACTION_SCAN);
@@ -69,4 +114,6 @@ public class MainActivity extends Activity {
             }
         }
     }
+
+
 }
