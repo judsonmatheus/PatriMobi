@@ -8,6 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -20,6 +23,7 @@ import com.aula5.judson.patrimobi.R;
 import com.aula5.judson.patrimobi.adapter.ItemAdapter;
 import com.aula5.judson.patrimobi.data.Item;
 import com.aula5.judson.patrimobi.data.ItemDAO;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -27,6 +31,7 @@ public class MainActivity extends ListActivity implements OnItemLongClickListene
     static final String ACTION_SCAN = "com.google.zxing.client.android.SCAN";
     private ItemDAO itemDAO;
     private ItemAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +43,10 @@ public class MainActivity extends ListActivity implements OnItemLongClickListene
 
         getListView().setOnItemLongClickListener(this);
 
-       itemDAO = new ItemDAO();
+        itemDAO = new ItemDAO();
 
         updateList();
+
     }
 
     private void updateList() {
@@ -77,9 +83,30 @@ public class MainActivity extends ListActivity implements OnItemLongClickListene
         }
 
     }
+    //--------------------------------------------------------------------------------------------------------
+    //Menu começa aqui
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.main_logout:
+                Toast.makeText(this, "Clicou em logout", Toast.LENGTH_SHORT).show();
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                break;
+        }
 
+        return super.onOptionsItemSelected(item);
+    }
 
     //--------------------------------------------------------------------------------------------------------
 
