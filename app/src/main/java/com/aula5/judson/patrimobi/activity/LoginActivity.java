@@ -31,6 +31,7 @@ public class LoginActivity extends Activity {
         if(currentUser != null){
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
+            finish();
         }
 
 
@@ -40,29 +41,36 @@ public class LoginActivity extends Activity {
     public void login(View view) {
 
         AutoCompleteTextView tv_email = findViewById(R.id.email);
-        String email = tv_email.getText().toString();
         EditText edt_password = findViewById(R.id.password);
-        String password = edt_password.getText().toString();
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    FirebaseUser currentUser = mAuth.getCurrentUser();
+        if( tv_email.length() != 0 && edt_password.length() != 0) {
+            String email = tv_email.getText().toString();
+            String password = edt_password.getText().toString();
 
-                    if (currentUser != null) {
-                        Toast.makeText(getApplication(), "Logado", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getApplication(), "Falha na Autenticação", Toast.LENGTH_SHORT).show();
-                    }
-                }else{
-                    Toast.makeText(getApplication(), "Falha na Autenticação", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser currentUser = mAuth.getCurrentUser();
+
+                                if (currentUser != null) {
+                                    Toast.makeText(getApplication(), "Logado", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Toast.makeText(getApplication(), "Falha na Autenticação", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(getApplication(), "Falha na Autenticação", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }else{
+            Toast.makeText(this, "Email ou Password não informado!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void logout(View view){

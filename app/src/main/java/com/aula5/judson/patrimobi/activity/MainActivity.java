@@ -24,6 +24,7 @@ import com.aula5.judson.patrimobi.adapter.ItemAdapter;
 import com.aula5.judson.patrimobi.data.Item;
 import com.aula5.judson.patrimobi.data.ItemDAO;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class MainActivity extends ListActivity implements OnItemLongClickListene
     static final String ACTION_SCAN = "com.google.zxing.client.android.SCAN";
     private ItemDAO itemDAO;
     private ItemAdapter adapter;
+    FirebaseAuth mAuth;
 
 
     @Override
@@ -38,6 +40,15 @@ public class MainActivity extends ListActivity implements OnItemLongClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if(currentUser == null){
+            Toast.makeText(this, "Login não realizado!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
         adapter = new ItemAdapter(this);
         setListAdapter(adapter);
 
@@ -90,7 +101,9 @@ public class MainActivity extends ListActivity implements OnItemLongClickListene
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+
+        return true;
+
     }
 
     @Override
@@ -98,10 +111,11 @@ public class MainActivity extends ListActivity implements OnItemLongClickListene
         switch (item.getItemId()){
             case R.id.main_logout:
                 Toast.makeText(this, "Clicou em logout", Toast.LENGTH_SHORT).show();
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
+                finish();
                 break;
         }
 
