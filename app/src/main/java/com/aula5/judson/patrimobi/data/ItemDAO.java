@@ -1,6 +1,9 @@
 package com.aula5.judson.patrimobi.data;
 
+import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -18,8 +21,21 @@ import static android.app.PendingIntent.getActivity;
 public class ItemDAO {
     Map<Integer, Item> db = new HashMap<Integer, Item>();
     public List<Item> items;
+    private DBHelper dbHelper;
+    private SQLiteDatabase database;
 
-    public ItemDAO(){
+
+    public ItemDAO(Context context){
+
+//        dbHelper = new DBHelper(context);
+//        database = dbHelper.getWritableDatabase();
+//        ContentValues values = new ContentValues();
+//        values.equals(new Item(111111, "Televisao", "Secretaria", 1299.99, "ATIVO", "10/01/2017", "Televisão de 22'. Marca Semp. Com 2 anos de garantia " ));
+//        values.equals(new Item(222222, "Monitor", "RH", 400.00, "ATIVO", "10/05/2018", "Monitor ACER de 19'. Entrada de video VGA. Resolução 1366x768."));
+//        values.equals(new Item(333333, "Computador", "TI", 819.65, "INATIVO", "21/02/2015", "Descktop N3 com 4Gb de RAM e processador I3."));
+//        values.equals(new Item(444444, "Mouse", "Diretoria", 5.90, "ATIVO", "21/02/2015", "Mouse USB N3"));
+//        values.equals(new Item(555555, "Teclado", "TI", 8.89, "ATIVO", "21/02/2015", "Teclado USB N3"));
+//        database.insert("patrimobi", "nome", values);
         items = new ArrayList<>();
         db.put(111111 ,new Item(111111, "Televisao", "Secretaria", 1299.99, "ATIVO", "10/01/2017", "Televisão de 22'. Marca Semp. Com 2 anos de garantia " ));
         db.put(222222, new Item(222222, "Monitor", "RH", 400.00, "ATIVO", "10/05/2018", "Monitor ACER de 19'. Entrada de video VGA. Resolução 1366x768."));
@@ -39,5 +55,10 @@ public class ItemDAO {
         }else{
             throw new Exception("CÓDIGO NÃO CADASTRADO");
         }
+    }
+
+    public void delete(Item item) {
+        items.remove(item);
+        list();
     }
 }

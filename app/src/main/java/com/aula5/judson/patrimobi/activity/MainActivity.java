@@ -23,12 +23,13 @@ import com.aula5.judson.patrimobi.R;
 import com.aula5.judson.patrimobi.adapter.ItemAdapter;
 import com.aula5.judson.patrimobi.data.Item;
 import com.aula5.judson.patrimobi.data.ItemDAO;
+import com.aula5.judson.patrimobi.dialog.DeleteDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
-public class MainActivity extends ListActivity implements OnItemLongClickListener{
+public class MainActivity extends ListActivity implements OnItemLongClickListener, DeleteDialog.OnDeleteListener{
     static final String ACTION_SCAN = "com.google.zxing.client.android.SCAN";
     private ItemDAO itemDAO;
     private ItemAdapter adapter;
@@ -54,7 +55,7 @@ public class MainActivity extends ListActivity implements OnItemLongClickListene
 
         getListView().setOnItemLongClickListener(this);
 
-        itemDAO = new ItemDAO();
+        itemDAO = new ItemDAO(this);
 
         updateList();
 
@@ -68,7 +69,12 @@ public class MainActivity extends ListActivity implements OnItemLongClickListene
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        return false;
+        Item item = (Item) adapter.getItem(position);
+
+        DeleteDialog dialog = new DeleteDialog();
+        dialog.setItem(item);
+        dialog.show(getFragmentManager(), "deleteDialog");
+        return true;
     }
 
     @Override
@@ -80,6 +86,10 @@ public class MainActivity extends ListActivity implements OnItemLongClickListene
         startActivity(intent);
     }
 
+    public void onDelete(Item item){
+        itemDAO.delete(item);
+        updateList();
+    }
     public void buscar(View view) {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
